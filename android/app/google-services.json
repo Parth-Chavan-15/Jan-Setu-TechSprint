@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "93874210800",
+    "project_id": "jan-setu-2025-1124d",
+    "storage_bucket": "jan-setu-2025-1124d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:93874210800:android:6a00775547dc0f5577ff35",
+        "android_client_info": {
+          "package_name": "com.mycompany.jansetu"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiyL2U18MLTyekzEtaA9Iyc9q7LkMhPPw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
