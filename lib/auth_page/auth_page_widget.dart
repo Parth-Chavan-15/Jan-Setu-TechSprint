@@ -2,28 +2,28 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'home_page_model.dart';
-export 'home_page_model.dart';
+import 'auth_page_model.dart';
+export 'auth_page_model.dart';
 
-class HomePageWidget extends StatefulWidget {
-  const HomePageWidget({super.key});
+class AuthPageWidget extends StatefulWidget {
+  const AuthPageWidget({super.key});
 
-  static String routeName = 'HomePage';
-  static String routePath = '/homePage';
+  static String routeName = 'Auth_Page';
+  static String routePath = '/authPage';
 
   @override
-  State<HomePageWidget> createState() => _HomePageWidgetState();
+  State<AuthPageWidget> createState() => _AuthPageWidgetState();
 }
 
-class _HomePageWidgetState extends State<HomePageWidget> {
-  late HomePageModel _model;
+class _AuthPageWidgetState extends State<AuthPageWidget> {
+  late AuthPageModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => HomePageModel());
+    _model = createModel(context, () => AuthPageModel());
   }
 
   @override

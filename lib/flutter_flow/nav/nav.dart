@@ -75,17 +75,36 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       navigatorKey: appNavigatorKey,
-      errorBuilder: (context, state) => appStateNotifier.loggedIn ? () : (),
+      errorBuilder: (context, state) => appStateNotifier.loggedIn
+          ? SellerDashboardWidget()
+          : AuthPageWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
-          builder: (context, _) => appStateNotifier.loggedIn ? () : (),
+          builder: (context, _) => appStateNotifier.loggedIn
+              ? SellerDashboardWidget()
+              : AuthPageWidget(),
         ),
         FFRoute(
-          name: HomePageWidget.routeName,
-          path: HomePageWidget.routePath,
-          builder: (context, params) => HomePageWidget(),
+          name: SellerDashboardWidget.routeName,
+          path: SellerDashboardWidget.routePath,
+          builder: (context, params) => SellerDashboardWidget(),
+        ),
+        FFRoute(
+          name: SellerScanWidget.routeName,
+          path: SellerScanWidget.routePath,
+          builder: (context, params) => SellerScanWidget(),
+        ),
+        FFRoute(
+          name: BarcodeScannerWidget.routeName,
+          path: BarcodeScannerWidget.routePath,
+          builder: (context, params) => BarcodeScannerWidget(),
+        ),
+        FFRoute(
+          name: AuthPageWidget.routeName,
+          path: AuthPageWidget.routePath,
+          builder: (context, params) => AuthPageWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -204,6 +223,7 @@ class FFParameters {
     String paramName,
     ParamType type, {
     bool isList = false,
+    List<String>? collectionNamePath,
   }) {
     if (futureParamValues.containsKey(paramName)) {
       return futureParamValues[paramName];
@@ -221,6 +241,7 @@ class FFParameters {
       param,
       type,
       isList,
+      collectionNamePath: collectionNamePath,
     );
   }
 }
@@ -254,7 +275,7 @@ class FFRoute {
 
           if (requireAuth && !appStateNotifier.loggedIn) {
             appStateNotifier.setRedirectLocationIfUnset(state.uri.toString());
-            return '/';
+            return '/authPage';
           }
           return null;
         },
