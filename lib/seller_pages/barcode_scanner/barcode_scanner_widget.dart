@@ -1,3 +1,4 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -133,14 +134,22 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                       _model.existingStock =
                           await queryStoreInventoryRecordOnce(
                         queryBuilder: (storeInventoryRecord) =>
-                            storeInventoryRecord.where(
-                          'medicine_id',
-                          isEqualTo: _model.foundMedicine?.reference,
-                        ),
+                            storeInventoryRecord
+                                .where(
+                                  'medicine_id',
+                                  isEqualTo: _model.foundMedicine?.reference,
+                                )
+                                .where(
+                                  'store_id',
+                                  isEqualTo: currentUserUid,
+                                ),
                         singleRecord: true,
                       ).then((s) => s.firstOrNull);
                       if (_model.existingStock != null) {
                         await _model.existingStock!.reference.update({
+                          ...createStoreInventoryRecordData(
+                            status: 'Verified',
+                          ),
                           ...mapToFirestore(
                             {
                               'qty_in_stock': FieldValue.increment(1),
@@ -153,8 +162,8 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                             .set(createStoreInventoryRecordData(
                               qtyInStock: 1,
                               medicineId: _model.foundMedicine?.reference,
-                              storeId: 'store_001',
-                              status: 'In Stock',
+                              storeId: currentUserUid,
+                              status: 'Verified',
                             ));
                       }
 

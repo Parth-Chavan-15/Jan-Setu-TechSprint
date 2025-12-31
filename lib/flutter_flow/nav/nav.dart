@@ -105,6 +105,54 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: AuthPageWidget.routeName,
           path: AuthPageWidget.routePath,
           builder: (context, params) => AuthPageWidget(),
+        ),
+        FFRoute(
+          name: UserPage3Widget.routeName,
+          path: UserPage3Widget.routePath,
+          builder: (context, params) => UserPage3Widget(
+            genericName: params.getParam(
+              'genericName',
+              ParamType.String,
+            ),
+            brandName: params.getParam(
+              'brandName',
+              ParamType.String,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: MedSearchWidget.routeName,
+          path: MedSearchWidget.routePath,
+          builder: (context, params) => MedSearchWidget(
+            genericName: params.getParam(
+              'genericName',
+              ParamType.String,
+            ),
+            brandName: params.getParam(
+              'brandName',
+              ParamType.String,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: BuyerHomeWidget.routeName,
+          path: BuyerHomeWidget.routePath,
+          builder: (context, params) => BuyerHomeWidget(),
+        ),
+        FFRoute(
+          name: HomeWidget.routeName,
+          path: HomeWidget.routePath,
+          builder: (context, params) => HomeWidget(),
+        ),
+        FFRoute(
+          name: ReminderPageWidget.routeName,
+          path: ReminderPageWidget.routePath,
+          builder: (context, params) => ReminderPageWidget(),
+        ),
+        FFRoute(
+          name: SafetyModalWidget.routeName,
+          path: SafetyModalWidget.routePath,
+          builder: (context, params) => SafetyModalWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
