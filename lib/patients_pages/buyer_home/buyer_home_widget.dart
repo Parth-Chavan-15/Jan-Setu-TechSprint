@@ -1,6 +1,8 @@
+import '/backend/gemini/gemini.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/upload_data.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'buyer_home_model.dart';
@@ -167,10 +169,10 @@ class _BuyerHomeWidgetState extends State<BuyerHomeWidget> {
                             ),
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
-                                  20.0, 30.0, 20.0, 20.0),
+                                  20.0, 15.0, 20.0, 15.0),
                               child: Container(
                                 width: 39.6,
-                                height: 409.1,
+                                height: 390.1,
                                 decoration: BoxDecoration(
                                   color: FlutterFlowTheme.of(context)
                                       .primaryBackground,
@@ -187,7 +189,8 @@ class _BuyerHomeWidgetState extends State<BuyerHomeWidget> {
                                   ],
                                   borderRadius: BorderRadius.circular(12.0),
                                   border: Border.all(
-                                    color: Color(0xFF007E13),
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
                                     width: 2.0,
                                   ),
                                 ),
@@ -197,58 +200,120 @@ class _BuyerHomeWidgetState extends State<BuyerHomeWidget> {
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           0.0, 50.0, 0.0, 0.0),
-                                      child: Material(
-                                        color: Colors.transparent,
-                                        elevation: 6.0,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12.0),
-                                        ),
-                                        child: Container(
-                                          width: 269.0,
-                                          height: 205.0,
-                                          decoration: BoxDecoration(
-                                            color: Color(0xFFE7E7E7),
+                                      child: InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () async {
+                                          final selectedMedia =
+                                              await selectMediaWithSourceBottomSheet(
+                                            context: context,
+                                            imageQuality: 100,
+                                            allowPhoto: true,
+                                          );
+                                          if (selectedMedia != null &&
+                                              selectedMedia.every((m) =>
+                                                  validateFileFormat(
+                                                      m.storagePath,
+                                                      context))) {
+                                            safeSetState(() => _model
+                                                    .isDataUploading_uploadedPhoto =
+                                                true);
+                                            var selectedUploadedFiles =
+                                                <FFUploadedFile>[];
+
+                                            try {
+                                              selectedUploadedFiles =
+                                                  selectedMedia
+                                                      .map(
+                                                          (m) => FFUploadedFile(
+                                                                name: m
+                                                                    .storagePath
+                                                                    .split('/')
+                                                                    .last,
+                                                                bytes: m.bytes,
+                                                                height: m
+                                                                    .dimensions
+                                                                    ?.height,
+                                                                width: m
+                                                                    .dimensions
+                                                                    ?.width,
+                                                                blurHash:
+                                                                    m.blurHash,
+                                                                originalFilename:
+                                                                    m.originalFilename,
+                                                              ))
+                                                      .toList();
+                                            } finally {
+                                              _model.isDataUploading_uploadedPhoto =
+                                                  false;
+                                            }
+                                            if (selectedUploadedFiles.length ==
+                                                selectedMedia.length) {
+                                              safeSetState(() {
+                                                _model.uploadedLocalFile_uploadedPhoto =
+                                                    selectedUploadedFiles.first;
+                                              });
+                                            } else {
+                                              safeSetState(() {});
+                                              return;
+                                            }
+                                          }
+
+                                          await geminiTextFromImage(
+                                            context,
+                                            'Act as an expert pharmacist. Analyze this prescription image to identify the primary Generic Chemical Salt Name.  Rules:  Output ONLY the generic name (e.g., \'Paracetamol\').  Do not include dosage (like \'500mg\').  Do not include brand names.  Do not write any sentences or extra words.  CRITICAL: If the text is blurry, unreadable, or not a medicine, output exactly: NULL  Example Success: Amoxicillin Example Failure: NULL',
+                                            uploadImageBytes: _model
+                                                .uploadedLocalFile_uploadedPhoto,
+                                          ).then((generatedText) {
+                                            safeSetState(() => _model
+                                                .geminiResult = generatedText);
+                                          });
+
+                                          safeSetState(() {});
+                                        },
+                                        child: Material(
+                                          color: Colors.transparent,
+                                          elevation: 6.0,
+                                          shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(12.0),
-                                            border: Border.all(
-                                              color: Color(0xFF058222),
-                                              width: 2.0,
-                                            ),
                                           ),
-                                          child: Stack(
-                                            children: [
-                                              Opacity(
-                                                opacity: 0.5,
-                                                child: Align(
-                                                  alignment:
-                                                      AlignmentDirectional(
-                                                          0.0, 0.0),
-                                                  child: Icon(
-                                                    Icons.add_photo_alternate,
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
+                                          child: Container(
+                                            width: 269.0,
+                                            height: 205.0,
+                                            decoration: BoxDecoration(
+                                              color: Color(0xFFE7E7E7),
+                                              borderRadius:
+                                                  BorderRadius.circular(12.0),
+                                              border: Border.all(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
                                                         .primaryText,
-                                                    size: 100.0,
+                                                width: 2.0,
+                                              ),
+                                            ),
+                                            child: Stack(
+                                              children: [
+                                                Opacity(
+                                                  opacity: 0.5,
+                                                  child: Align(
+                                                    alignment:
+                                                        AlignmentDirectional(
+                                                            0.0, 0.0),
+                                                    child: Icon(
+                                                      Icons.add_photo_alternate,
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText,
+                                                      size: 100.0,
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                              Align(
-                                                alignment: AlignmentDirectional(
-                                                    0.0, 0.0),
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          12.0),
-                                                  child: Image.network(
-                                                    '',
-                                                    width: 266.0,
-                                                    height: 385.4,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),

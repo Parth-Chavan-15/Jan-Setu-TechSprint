@@ -4,6 +4,7 @@ import 'schema/util/firestore_util.dart';
 
 import 'schema/medicines_record.dart';
 import 'schema/store_inventory_record.dart';
+import 'schema/stores_record.dart';
 
 export 'dart:async' show StreamSubscription;
 export 'package:cloud_firestore/cloud_firestore.dart' hide Order;
@@ -14,6 +15,7 @@ export 'schema/util/schema_util.dart';
 
 export 'schema/medicines_record.dart';
 export 'schema/store_inventory_record.dart';
+export 'schema/stores_record.dart';
 
 /// Functions to query MedicinesRecords (as a Stream and as a Future).
 Future<int> queryMedicinesRecordCount({
@@ -84,6 +86,43 @@ Future<List<StoreInventoryRecord>> queryStoreInventoryRecordOnce({
     queryCollectionOnce(
       StoreInventoryRecord.collection,
       StoreInventoryRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+/// Functions to query StoresRecords (as a Stream and as a Future).
+Future<int> queryStoresRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      StoresRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<StoresRecord>> queryStoresRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      StoresRecord.collection,
+      StoresRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<StoresRecord>> queryStoresRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      StoresRecord.collection,
+      StoresRecord.fromSnapshot,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,

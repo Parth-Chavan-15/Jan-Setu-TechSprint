@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '/backend/backend.dart';
 
 import '/auth/base_auth_user_provider.dart';
 
@@ -76,15 +77,15 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       refreshListenable: appStateNotifier,
       navigatorKey: appNavigatorKey,
       errorBuilder: (context, state) => appStateNotifier.loggedIn
-          ? SellerDashboardWidget()
-          : AuthPageWidget(),
+          ? AuthPageWidget()
+          : SellerDashboardWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) => appStateNotifier.loggedIn
-              ? SellerDashboardWidget()
-              : AuthPageWidget(),
+              ? AuthPageWidget()
+              : SellerDashboardWidget(),
         ),
         FFRoute(
           name: SellerDashboardWidget.routeName,
@@ -153,6 +154,30 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: SafetyModalWidget.routeName,
           path: SafetyModalWidget.routePath,
           builder: (context, params) => SafetyModalWidget(),
+        ),
+        FFRoute(
+          name: PatientSearchWidget.routeName,
+          path: PatientSearchWidget.routePath,
+          builder: (context, params) => PatientSearchWidget(),
+        ),
+        FFRoute(
+          name: PatientStoreResultsWidget.routeName,
+          path: PatientStoreResultsWidget.routePath,
+          asyncParams: {
+            'clickedMedicineDoc':
+                getDoc(['medicines'], MedicinesRecord.fromSnapshot),
+          },
+          builder: (context, params) => PatientStoreResultsWidget(
+            clickedMedicineDoc: params.getParam(
+              'clickedMedicineDoc',
+              ParamType.Document,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: AuthenticationpageWidget.routeName,
+          path: AuthenticationpageWidget.routePath,
+          builder: (context, params) => AuthenticationpageWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -323,7 +348,7 @@ class FFRoute {
 
           if (requireAuth && !appStateNotifier.loggedIn) {
             appStateNotifier.setRedirectLocationIfUnset(state.uri.toString());
-            return '/authPage';
+            return '/sellerDashboard';
           }
           return null;
         },

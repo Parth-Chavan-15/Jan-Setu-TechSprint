@@ -449,8 +449,7 @@ class _SellerDashboardWidgetState extends State<SellerDashboardWidget> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            containerMedicinesRecord
-                                                .genericName,
+                                            containerMedicinesRecord.brandName,
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(

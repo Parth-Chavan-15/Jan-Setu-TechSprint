@@ -300,67 +300,136 @@ class _InvoiceReviewSheetWidgetState extends State<InvoiceReviewSheetWidget> {
                 onPressed: () async {
                   _model.skippedNames = '';
                   safeSetState(() {});
-                  for (int loop1Index = 0;
-                      loop1Index < _model.editableList.length;
-                      loop1Index++) {
-                    final currentLoop1Item = _model.editableList[loop1Index];
-                    _model.matchedMedicine = await queryMedicinesRecordOnce(
-                      queryBuilder: (medicinesRecord) => medicinesRecord.where(
-                        'generic_name',
-                        isEqualTo: getJsonField(
-                          currentLoop1Item,
-                          r'''$.name''',
-                        ).toString(),
-                      ),
-                      singleRecord: true,
-                    ).then((s) => s.firstOrNull);
-                    if (_model.matchedMedicine != null) {
-                      _model.inventoryEntry =
-                          await queryStoreInventoryRecordOnce(
-                        queryBuilder: (storeInventoryRecord) =>
-                            storeInventoryRecord
-                                .where(
-                                  'medicine_id',
-                                  isEqualTo: _model.matchedMedicine?.reference,
-                                )
-                                .where(
-                                  'store_id',
-                                  isEqualTo: currentUserUid,
-                                ),
+                  _model.sellerStore = await queryStoresRecordOnce(
+                    queryBuilder: (storesRecord) => storesRecord.where(
+                      'owner_uid',
+                      isEqualTo: currentUserUid,
+                    ),
+                    singleRecord: true,
+                  ).then((s) => s.firstOrNull);
+                  if (_model.sellerStore != null) {
+                    for (int loop1Index = 0;
+                        loop1Index < _model.editableList.length;
+                        loop1Index++) {
+                      final currentLoop1Item = _model.editableList[loop1Index];
+                      _model.matchedMedicine = await queryMedicinesRecordOnce(
+                        queryBuilder: (medicinesRecord) =>
+                            medicinesRecord.where(
+                          'brand_name',
+                          isEqualTo: getJsonField(
+                            currentLoop1Item,
+                            r'''$.name''',
+                          ).toString(),
+                        ),
                         singleRecord: true,
                       ).then((s) => s.firstOrNull);
-
-                      await _model.inventoryEntry!.reference.update({
-                        ...createStoreInventoryRecordData(
-                          status: 'Verified',
-                        ),
-                        ...mapToFirestore(
-                          {
-                            'qty_in_stock': FieldValue.increment(getJsonField(
-                              currentLoop1Item,
-                              r'''$.qty''',
-                            )),
-                          },
-                        ),
-                      });
-                    } else {
-                      _model.skippedNames =
-                          '${_model.skippedNames}, ${getJsonField(
-                        currentLoop1Item,
-                        r'''$.name''',
-                      ).toString()}';
-                      safeSetState(() {});
+                      if (_model.matchedMedicine != null) {
+                        _model.inventoryEntry =
+                            await queryStoreInventoryRecordOnce(
+                          queryBuilder: (storeInventoryRecord) =>
+                              storeInventoryRecord
+                                  .where(
+                                    'medicine_id',
+                                    isEqualTo:
+                                        _model.matchedMedicine?.reference,
+                                  )
+                                  .where(
+                                    'store_ref',
+                                    isEqualTo: _model.sellerStore?.reference,
+                                  ),
+                          singleRecord: true,
+                        ).then((s) => s.firstOrNull);
+                        if (_model.inventoryEntry != null) {
+                          await _model.inventoryEntry!.reference.update({
+                            ...createStoreInventoryRecordData(
+                              status: 'Verified',
+                              isGeneric: _model.matchedMedicine?.isGeneric,
+                            ),
+                            ...mapToFirestore(
+                              {
+                                'qty_in_stock':
+                                    FieldValue.increment(getJsonField(
+                                  currentLoop1Item,
+                                  r'''$.qty''',
+                                )),
+                                'last_updated': FieldValue.serverTimestamp(),
+                              },
+                            ),
+                          });
+                        } else {
+                          await StoreInventoryRecord.collection.doc().set({
+                            ...createStoreInventoryRecordData(
+                              qtyInStock: getJsonField(
+                                currentLoop1Item,
+                                r'''$.qty''',
+                              ),
+                              medicineId: _model.matchedMedicine?.reference,
+                              status: 'Verified',
+                              unitPrice: valueOrDefault<double>(
+                                _model.matchedMedicine?.stdPrice,
+                                0.0,
+                              ),
+                              storeRef: _model.sellerStore?.reference,
+                              isGeneric: _model.matchedMedicine?.isGeneric,
+                            ),
+                            ...mapToFirestore(
+                              {
+                                'last_updated': FieldValue.serverTimestamp(),
+                              },
+                            ),
+                          });
+                        }
+                      } else {
+                        _model.skippedNames =
+                            '${_model.skippedNames}, ${getJsonField(
+                          currentLoop1Item,
+                          r'''$.name''',
+                        ).toString()}';
+                        safeSetState(() {});
+                      }
                     }
-                  }
-                  if (_model.skippedNames != null &&
-                      _model.skippedNames != '') {
+                    if (_model.skippedNames != null &&
+                        _model.skippedNames != '') {
+                      await showDialog(
+                        context: context,
+                        builder: (alertDialogContext) {
+                          return AlertDialog(
+                            title: Text('Update Complete with Warnings'),
+                            content: Text(
+                                'Stock updated. The following items were skipped (Not in Global Catalog): ${_model.skippedNames}'),
+                            actions: [
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.pop(alertDialogContext),
+                                child: Text('Ok'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                      Navigator.pop(context);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Success! All items verified and stock updated.',
+                            style: TextStyle(
+                              color: FlutterFlowTheme.of(context).primaryText,
+                            ),
+                          ),
+                          duration: Duration(milliseconds: 2000),
+                          backgroundColor:
+                              FlutterFlowTheme.of(context).secondary,
+                        ),
+                      );
+                    }
+                  } else {
                     await showDialog(
                       context: context,
                       builder: (alertDialogContext) {
                         return AlertDialog(
-                          title: Text('Update Complete with Warnings'),
-                          content: Text(
-                              'Stock updated. The following items were skipped (Not in Global Catalog): ${_model.skippedNames}'),
+                          title: Text('Access Denied'),
+                          content: Text('No store assigned to this account.'),
                           actions: [
                             TextButton(
                               onPressed: () =>
@@ -370,20 +439,6 @@ class _InvoiceReviewSheetWidgetState extends State<InvoiceReviewSheetWidget> {
                           ],
                         );
                       },
-                    );
-                    Navigator.pop(context);
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          'Success! All items verified and stock updated.',
-                          style: TextStyle(
-                            color: FlutterFlowTheme.of(context).primaryText,
-                          ),
-                        ),
-                        duration: Duration(milliseconds: 2000),
-                        backgroundColor: FlutterFlowTheme.of(context).secondary,
-                      ),
                     );
                   }
 

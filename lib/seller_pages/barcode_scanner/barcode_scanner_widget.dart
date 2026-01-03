@@ -65,8 +65,8 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                     color: FlutterFlowTheme.of(context).info,
                     size: 24.0,
                   ),
-                  onPressed: () {
-                    print('IconButton pressed ...');
+                  onPressed: () async {
+                    Navigator.pop(context);
                   },
                 ),
               ),
@@ -131,56 +131,96 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                       singleRecord: true,
                     ).then((s) => s.firstOrNull);
                     if (_model.foundMedicine != null) {
-                      _model.existingStock =
-                          await queryStoreInventoryRecordOnce(
-                        queryBuilder: (storeInventoryRecord) =>
-                            storeInventoryRecord
-                                .where(
-                                  'medicine_id',
-                                  isEqualTo: _model.foundMedicine?.reference,
-                                )
-                                .where(
-                                  'store_id',
-                                  isEqualTo: currentUserUid,
-                                ),
+                      _model.sellerStore = await queryStoresRecordOnce(
+                        queryBuilder: (storesRecord) => storesRecord.where(
+                          'owner_uid',
+                          isEqualTo: currentUserUid,
+                        ),
                         singleRecord: true,
                       ).then((s) => s.firstOrNull);
-                      if (_model.existingStock != null) {
-                        await _model.existingStock!.reference.update({
-                          ...createStoreInventoryRecordData(
-                            status: 'Verified',
-                          ),
-                          ...mapToFirestore(
-                            {
-                              'qty_in_stock': FieldValue.increment(1),
-                            },
-                          ),
-                        });
-                      } else {
-                        await StoreInventoryRecord.collection
-                            .doc()
-                            .set(createStoreInventoryRecordData(
+                      if (_model.sellerStore != null) {
+                        _model.existingStock =
+                            await queryStoreInventoryRecordOnce(
+                          queryBuilder: (storeInventoryRecord) =>
+                              storeInventoryRecord
+                                  .where(
+                                    'medicine_id',
+                                    isEqualTo: _model.foundMedicine?.reference,
+                                  )
+                                  .where(
+                                    'store_ref',
+                                    isEqualTo: _model.sellerStore?.reference,
+                                  ),
+                          singleRecord: true,
+                        ).then((s) => s.firstOrNull);
+                        if (_model.existingStock != null) {
+                          await _model.existingStock!.reference.update({
+                            ...createStoreInventoryRecordData(
+                              status: 'Verified',
+                              isGeneric: _model.foundMedicine?.isGeneric,
+                            ),
+                            ...mapToFirestore(
+                              {
+                                'qty_in_stock': FieldValue.increment(1),
+                                'last_updated': FieldValue.serverTimestamp(),
+                              },
+                            ),
+                          });
+                        } else {
+                          await StoreInventoryRecord.collection.doc().set({
+                            ...createStoreInventoryRecordData(
                               qtyInStock: 1,
                               medicineId: _model.foundMedicine?.reference,
-                              storeId: currentUserUid,
                               status: 'Verified',
-                            ));
-                      }
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            'Added ${_model.foundMedicine?.genericName}(+1)',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
+                              unitPrice: valueOrDefault<double>(
+                                _model.foundMedicine?.stdPrice,
+                                0.0,
+                              ),
+                              storeRef: _model.sellerStore?.reference,
+                              isGeneric: _model.foundMedicine?.isGeneric,
                             ),
-                            textAlign: TextAlign.center,
+                            ...mapToFirestore(
+                              {
+                                'last_updated': FieldValue.serverTimestamp(),
+                              },
+                            ),
+                          });
+                        }
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Added ${_model.foundMedicine?.brandName} (+1)',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            duration: Duration(milliseconds: 2000),
+                            backgroundColor:
+                                FlutterFlowTheme.of(context).primary,
                           ),
-                          duration: Duration(milliseconds: 2000),
-                          backgroundColor: FlutterFlowTheme.of(context).primary,
-                        ),
-                      );
+                        );
+                      } else {
+                        await showDialog(
+                          context: context,
+                          builder: (alertDialogContext) {
+                            return AlertDialog(
+                              title: Text('Access Denied'),
+                              content:
+                                  Text('No store assigned to this account.'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.pop(alertDialogContext),
+                                  child: Text('Ok'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
                     } else {
                       await showDialog(
                         context: context,
