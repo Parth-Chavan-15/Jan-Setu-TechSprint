@@ -1,3 +1,18 @@
 {
-  "indexes": []
+  "indexes": [
+    {
+      "collectionGroup": "store_inventory",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "store_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "qty_in_stock",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ]
 }

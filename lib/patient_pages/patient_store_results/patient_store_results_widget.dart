@@ -3,6 +3,7 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
+import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -393,220 +394,165 @@ class _PatientStoreResultsWidgetState extends State<PatientStoreResultsWidget> {
                             return Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   16.0, 0.0, 16.0, 0.0),
-                              child: Material(
-                                color: Colors.transparent,
-                                elevation: 5.0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12.0),
-                                ),
-                                child: Container(
-                                  width: 100.0,
-                                  height: 100.0,
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
+                              child: InkWell(
+                                splashColor: Colors.transparent,
+                                focusColor: Colors.transparent,
+                                hoverColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                onTap: () async {
+                                  context.pushNamed(
+                                    StoreNavigatorWidget.routeName,
+                                    queryParameters: {
+                                      'storeDocRef': serializeParam(
+                                        sortedStoresItem.storeRef,
+                                        ParamType.DocumentReference,
+                                      ),
+                                      'clickedInventoryItem': serializeParam(
+                                        sortedStoresItem,
+                                        ParamType.Document,
+                                      ),
+                                      'originalBrandName': serializeParam(
+                                        widget.clickedMedicineDoc?.brandName,
+                                        ParamType.String,
+                                      ),
+                                    }.withoutNulls,
+                                    extra: <String, dynamic>{
+                                      'clickedInventoryItem': sortedStoresItem,
+                                    },
+                                  );
+                                },
+                                child: Material(
+                                  color: Colors.transparent,
+                                  elevation: 5.0,
+                                  shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12.0),
                                   ),
-                                  child: StreamBuilder<StoresRecord>(
-                                    stream: StoresRecord.getDocument(
-                                        sortedStoresItem.storeRef!),
-                                    builder: (context, snapshot) {
-                                      // Customize what your widget looks like when it's loading.
-                                      if (!snapshot.hasData) {
-                                        return Center(
-                                          child: SizedBox(
-                                            width: 50.0,
-                                            height: 50.0,
-                                            child: CircularProgressIndicator(
-                                              valueColor:
-                                                  AlwaysStoppedAnimation<Color>(
-                                                FlutterFlowTheme.of(context)
-                                                    .primary,
+                                  child: Container(
+                                    width: 100.0,
+                                    height: 100.0,
+                                    decoration: BoxDecoration(
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryBackground,
+                                      borderRadius: BorderRadius.circular(12.0),
+                                    ),
+                                    child: StreamBuilder<StoresRecord>(
+                                      stream: StoresRecord.getDocument(
+                                          sortedStoresItem.storeRef!),
+                                      builder: (context, snapshot) {
+                                        // Customize what your widget looks like when it's loading.
+                                        if (!snapshot.hasData) {
+                                          return Center(
+                                            child: SizedBox(
+                                              width: 50.0,
+                                              height: 50.0,
+                                              child: CircularProgressIndicator(
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                        Color>(
+                                                  FlutterFlowTheme.of(context)
+                                                      .primary,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        );
-                                      }
+                                          );
+                                        }
 
-                                      final columnStoresRecord = snapshot.data!;
+                                        final columnStoresRecord =
+                                            snapshot.data!;
 
-                                      return Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 0.0, 5.0, 0.0),
-                                            child:
-                                                StreamBuilder<MedicinesRecord>(
-                                              stream:
-                                                  MedicinesRecord.getDocument(
-                                                      sortedStoresItem
-                                                          .medicineId!),
-                                              builder: (context, snapshot) {
-                                                // Customize what your widget looks like when it's loading.
-                                                if (!snapshot.hasData) {
-                                                  return Center(
-                                                    child: SizedBox(
-                                                      width: 50.0,
-                                                      height: 50.0,
-                                                      child:
-                                                          CircularProgressIndicator(
-                                                        valueColor:
-                                                            AlwaysStoppedAnimation<
-                                                                Color>(
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primary,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  );
-                                                }
-
-                                                final rowMedicinesRecord =
-                                                    snapshot.data!;
-
-                                                return Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  12.0,
-                                                                  0.0,
-                                                                  5.0,
-                                                                  0.0),
-                                                      child: Container(
-                                                        width: 20.0,
-                                                        height: 20.0,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: functions
-                                                              .getStatusColor(
-                                                                  sortedStoresItem
-                                                                      .lastUpdated),
-                                                          shape:
-                                                              BoxShape.circle,
-                                                          border: Border.all(
-                                                            width: 1.0,
+                                        return Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0.0, 0.0, 5.0, 0.0),
+                                              child: StreamBuilder<
+                                                  MedicinesRecord>(
+                                                stream:
+                                                    MedicinesRecord.getDocument(
+                                                        sortedStoresItem
+                                                            .medicineId!),
+                                                builder: (context, snapshot) {
+                                                  // Customize what your widget looks like when it's loading.
+                                                  if (!snapshot.hasData) {
+                                                    return Center(
+                                                      child: SizedBox(
+                                                        width: 50.0,
+                                                        height: 50.0,
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                          valueColor:
+                                                              AlwaysStoppedAnimation<
+                                                                  Color>(
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primary,
                                                           ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    Flexible(
-                                                      child: Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Text(
-                                                            rowMedicinesRecord
-                                                                .brandName,
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .bodyMedium
-                                                                .override(
-                                                                  font:
-                                                                      GoogleFonts
-                                                                          .inter(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
-                                                                    fontStyle: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .fontStyle,
-                                                                  ),
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontSize:
-                                                                      16.0,
-                                                                  letterSpacing:
-                                                                      0.0,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600,
-                                                                  fontStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontStyle,
-                                                                ),
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        0.0,
-                                                                        4.0,
-                                                                        0.0,
-                                                                        0.0),
-                                                            child: Text(
-                                                              columnStoresRecord
-                                                                  .storeName,
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyMedium
-                                                                  .override(
-                                                                    font: GoogleFonts
-                                                                        .inter(
-                                                                      fontWeight: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .bodyMedium
-                                                                          .fontWeight,
-                                                                      fontStyle: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .bodyMedium
-                                                                          .fontStyle,
-                                                                    ),
-                                                                    color: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .secondaryText,
-                                                                    letterSpacing:
-                                                                        0.0,
-                                                                    fontWeight: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .fontWeight,
-                                                                    fontStyle: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .fontStyle,
-                                                                  ),
+                                                    );
+                                                  }
+
+                                                  final rowMedicinesRecord =
+                                                      snapshot.data!;
+
+                                                  return Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    12.0,
+                                                                    0.0,
+                                                                    5.0,
+                                                                    0.0),
+                                                        child: Container(
+                                                          width: 20.0,
+                                                          height: 20.0,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: functions
+                                                                .getStatusColor(
+                                                                    sortedStoresItem
+                                                                        .lastUpdated),
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            border: Border.all(
+                                                              width: 1.0,
                                                             ),
                                                           ),
-                                                          if (rowMedicinesRecord
-                                                                  .isGeneric ==
-                                                              true)
-                                                            Container(
-                                                              width: 100.0,
-                                                              height: 24.0,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .tertiary,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            20.0),
-                                                              ),
-                                                              alignment:
-                                                                  AlignmentDirectional(
-                                                                      0.0, 0.0),
-                                                              child: Text(
-                                                                'Generic',
+                                                        ),
+                                                      ),
+                                                      Flexible(
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      0.0,
+                                                                      5.0,
+                                                                      0.0,
+                                                                      5.0),
+                                                          child: Column(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                rowMedicinesRecord
+                                                                    .brandName,
                                                                 style: FlutterFlowTheme.of(
                                                                         context)
                                                                     .bodyMedium
@@ -614,18 +560,137 @@ class _PatientStoreResultsWidgetState extends State<PatientStoreResultsWidget> {
                                                                       font: GoogleFonts
                                                                           .inter(
                                                                         fontWeight:
-                                                                            FontWeight.bold,
+                                                                            FontWeight.w600,
                                                                         fontStyle: FlutterFlowTheme.of(context)
                                                                             .bodyMedium
                                                                             .fontStyle,
                                                                       ),
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .secondaryBackground,
+                                                                      color: Colors
+                                                                          .black,
                                                                       fontSize:
-                                                                          13.0,
+                                                                          16.0,
                                                                       letterSpacing:
                                                                           0.0,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                      fontStyle: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodyMedium
+                                                                          .fontStyle,
+                                                                    ),
+                                                              ),
+                                                              Padding(
+                                                                padding:
+                                                                    EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            0.0,
+                                                                            4.0,
+                                                                            0.0,
+                                                                            0.0),
+                                                                child: Text(
+                                                                  columnStoresRecord
+                                                                      .storeName,
+                                                                  style: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .override(
+                                                                        font: GoogleFonts
+                                                                            .inter(
+                                                                          fontWeight: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontWeight,
+                                                                          fontStyle: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontStyle,
+                                                                        ),
+                                                                        color: FlutterFlowTheme.of(context)
+                                                                            .secondaryText,
+                                                                        letterSpacing:
+                                                                            0.0,
+                                                                        fontWeight: FlutterFlowTheme.of(context)
+                                                                            .bodyMedium
+                                                                            .fontWeight,
+                                                                        fontStyle: FlutterFlowTheme.of(context)
+                                                                            .bodyMedium
+                                                                            .fontStyle,
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                              if (rowMedicinesRecord
+                                                                      .isGeneric ==
+                                                                  true)
+                                                                Padding(
+                                                                  padding: EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          0.0,
+                                                                          7.0,
+                                                                          0.0,
+                                                                          0.0),
+                                                                  child:
+                                                                      Container(
+                                                                    width:
+                                                                        100.0,
+                                                                    height:
+                                                                        24.0,
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      color: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .tertiary,
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              20.0),
+                                                                    ),
+                                                                    alignment:
+                                                                        AlignmentDirectional(
+                                                                            0.0,
+                                                                            0.0),
+                                                                    child: Text(
+                                                                      'Generic',
+                                                                      style: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodyMedium
+                                                                          .override(
+                                                                            font:
+                                                                                GoogleFonts.inter(
+                                                                              fontWeight: FontWeight.bold,
+                                                                              fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                            ),
+                                                                            color:
+                                                                                FlutterFlowTheme.of(context).secondaryBackground,
+                                                                            fontSize:
+                                                                                13.0,
+                                                                            letterSpacing:
+                                                                                0.0,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                            fontStyle:
+                                                                                FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                          ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                            ].divide(SizedBox(
+                                                                height: 5.0)),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      RichText(
+                                                        textScaler:
+                                                            MediaQuery.of(
+                                                                    context)
+                                                                .textScaler,
+                                                        text: TextSpan(
+                                                          children: [
+                                                            TextSpan(
+                                                              text: '₹ ',
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyMedium
+                                                                  .override(
+                                                                    font: GoogleFonts
+                                                                        .inter(
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .bold,
@@ -634,27 +699,12 @@ class _PatientStoreResultsWidgetState extends State<PatientStoreResultsWidget> {
                                                                           .bodyMedium
                                                                           .fontStyle,
                                                                     ),
-                                                              ),
-                                                            ),
-                                                        ].divide(SizedBox(
-                                                            height: 5.0)),
-                                                      ),
-                                                    ),
-                                                    RichText(
-                                                      textScaler:
-                                                          MediaQuery.of(context)
-                                                              .textScaler,
-                                                      text: TextSpan(
-                                                        children: [
-                                                          TextSpan(
-                                                            text: '₹ ',
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .bodyMedium
-                                                                .override(
-                                                                  font:
-                                                                      GoogleFonts
-                                                                          .inter(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontSize:
+                                                                        18.0,
+                                                                    letterSpacing:
+                                                                        0.0,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .bold,
@@ -663,55 +713,26 @@ class _PatientStoreResultsWidgetState extends State<PatientStoreResultsWidget> {
                                                                         .bodyMedium
                                                                         .fontStyle,
                                                                   ),
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontSize:
-                                                                      18.0,
-                                                                  letterSpacing:
-                                                                      0.0,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontStyle,
-                                                                ),
-                                                          ),
-                                                          TextSpan(
-                                                            text:
-                                                                sortedStoresItem
-                                                                    .unitPrice
-                                                                    .toString(),
-                                                            style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 18.0,
                                                             ),
-                                                          )
-                                                        ],
-                                                        style:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .override(
-                                                                  font:
-                                                                      GoogleFonts
-                                                                          .inter(
-                                                                    fontWeight: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .fontWeight,
-                                                                    fontStyle: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .fontStyle,
-                                                                  ),
-                                                                  color: Colors
-                                                                      .black,
-                                                                  letterSpacing:
-                                                                      0.0,
+                                                            TextSpan(
+                                                              text: sortedStoresItem
+                                                                  .unitPrice
+                                                                  .toString(),
+                                                              style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize: 18.0,
+                                                              ),
+                                                            )
+                                                          ],
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyMedium
+                                                              .override(
+                                                                font:
+                                                                    GoogleFonts
+                                                                        .inter(
                                                                   fontWeight: FlutterFlowTheme.of(
                                                                           context)
                                                                       .bodyMedium
@@ -721,17 +742,31 @@ class _PatientStoreResultsWidgetState extends State<PatientStoreResultsWidget> {
                                                                       .bodyMedium
                                                                       .fontStyle,
                                                                 ),
+                                                                color: Colors
+                                                                    .black,
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontWeight,
+                                                                fontStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                              ),
+                                                        ),
                                                       ),
-                                                    ),
-                                                  ].divide(
-                                                      SizedBox(width: 12.0)),
-                                                );
-                                              },
+                                                    ].divide(
+                                                        SizedBox(width: 12.0)),
+                                                  );
+                                                },
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      );
-                                    },
+                                          ],
+                                        );
+                                      },
+                                    ),
                                   ),
                                 ),
                               ),

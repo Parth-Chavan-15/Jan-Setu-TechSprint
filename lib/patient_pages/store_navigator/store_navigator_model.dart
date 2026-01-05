@@ -1,9 +1,8 @@
 import '/flutter_flow/flutter_flow_util.dart';
-import '/index.dart';
-import 'med_search_widget.dart' show MedSearchWidget;
+import 'store_navigator_widget.dart' show StoreNavigatorWidget;
 import 'package:flutter/material.dart';
 
-class MedSearchModel extends FlutterFlowModel<MedSearchWidget> {
+class StoreNavigatorModel extends FlutterFlowModel<StoreNavigatorWidget> {
   @override
   void initState(BuildContext context) {}
 

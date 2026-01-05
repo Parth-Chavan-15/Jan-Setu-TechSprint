@@ -5,17 +5,19 @@ export '/seller_pages/seller_scan/seller_scan_widget.dart'
     show SellerScanWidget;
 export '/seller_pages/barcode_scanner/barcode_scanner_widget.dart'
     show BarcodeScannerWidget;
-export '/auth_page/auth_page_widget.dart' show AuthPageWidget;
-export '/patients_pages/user_page3/user_page3_widget.dart' show UserPage3Widget;
-export '/patients_pages/med_search/med_search_widget.dart' show MedSearchWidget;
-export '/patients_pages/buyer_home/buyer_home_widget.dart' show BuyerHomeWidget;
-export '/patients_pages/home/home_widget.dart' show HomeWidget;
-export '/patients_pages/reminder_page/reminder_page_widget.dart'
-    show ReminderPageWidget;
-export '/patients_pages/safety_modal/safety_modal_widget.dart'
-    show SafetyModalWidget;
-export '/p1/patient_search/patient_search_widget.dart' show PatientSearchWidget;
-export '/p1/patient_store_results/patient_store_results_widget.dart'
+export '/safety_modal/safety_modal_widget.dart' show SafetyModalWidget;
+export '/patient_pages/patient_search/patient_search_widget.dart'
+    show PatientSearchWidget;
+export '/patient_pages/patient_store_results/patient_store_results_widget.dart'
     show PatientStoreResultsWidget;
-export '/patients_pages/authenticationpage/authenticationpage_widget.dart'
-    show AuthenticationpageWidget;
+export '/patient_pages/store_navigator/store_navigator_widget.dart'
+    show StoreNavigatorWidget;
+export '/home_page/home_page_widget.dart' show HomePageWidget;
+export '/authentication_pages/seller_login/seller_login_widget.dart'
+    show SellerLoginWidget;
+export '/authentication_pages/shop_registration/shop_registration_widget.dart'
+    show ShopRegistrationWidget;
+export '/authentication_pages/seller_gate_page/seller_gate_page_widget.dart'
+    show SellerGatePageWidget;
+export '/authentication_pages/seller_auth_register/seller_auth_register_widget.dart'
+    show SellerAuthRegisterWidget;

@@ -77,15 +77,15 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       refreshListenable: appStateNotifier,
       navigatorKey: appNavigatorKey,
       errorBuilder: (context, state) => appStateNotifier.loggedIn
-          ? AuthPageWidget()
-          : SellerDashboardWidget(),
+          ? SellerGatePageWidget()
+          : SellerAuthRegisterWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) => appStateNotifier.loggedIn
-              ? AuthPageWidget()
-              : SellerDashboardWidget(),
+              ? SellerGatePageWidget()
+              : SellerAuthRegisterWidget(),
         ),
         FFRoute(
           name: SellerDashboardWidget.routeName,
@@ -101,54 +101,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: BarcodeScannerWidget.routeName,
           path: BarcodeScannerWidget.routePath,
           builder: (context, params) => BarcodeScannerWidget(),
-        ),
-        FFRoute(
-          name: AuthPageWidget.routeName,
-          path: AuthPageWidget.routePath,
-          builder: (context, params) => AuthPageWidget(),
-        ),
-        FFRoute(
-          name: UserPage3Widget.routeName,
-          path: UserPage3Widget.routePath,
-          builder: (context, params) => UserPage3Widget(
-            genericName: params.getParam(
-              'genericName',
-              ParamType.String,
-            ),
-            brandName: params.getParam(
-              'brandName',
-              ParamType.String,
-            ),
-          ),
-        ),
-        FFRoute(
-          name: MedSearchWidget.routeName,
-          path: MedSearchWidget.routePath,
-          builder: (context, params) => MedSearchWidget(
-            genericName: params.getParam(
-              'genericName',
-              ParamType.String,
-            ),
-            brandName: params.getParam(
-              'brandName',
-              ParamType.String,
-            ),
-          ),
-        ),
-        FFRoute(
-          name: BuyerHomeWidget.routeName,
-          path: BuyerHomeWidget.routePath,
-          builder: (context, params) => BuyerHomeWidget(),
-        ),
-        FFRoute(
-          name: HomeWidget.routeName,
-          path: HomeWidget.routePath,
-          builder: (context, params) => HomeWidget(),
-        ),
-        FFRoute(
-          name: ReminderPageWidget.routeName,
-          path: ReminderPageWidget.routePath,
-          builder: (context, params) => ReminderPageWidget(),
         ),
         FFRoute(
           name: SafetyModalWidget.routeName,
@@ -175,9 +127,53 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           ),
         ),
         FFRoute(
-          name: AuthenticationpageWidget.routeName,
-          path: AuthenticationpageWidget.routePath,
-          builder: (context, params) => AuthenticationpageWidget(),
+          name: StoreNavigatorWidget.routeName,
+          path: StoreNavigatorWidget.routePath,
+          asyncParams: {
+            'clickedInventoryItem':
+                getDoc(['store_inventory'], StoreInventoryRecord.fromSnapshot),
+          },
+          builder: (context, params) => StoreNavigatorWidget(
+            storeDocRef: params.getParam(
+              'storeDocRef',
+              ParamType.DocumentReference,
+              isList: false,
+              collectionNamePath: ['stores'],
+            ),
+            clickedInventoryItem: params.getParam(
+              'clickedInventoryItem',
+              ParamType.Document,
+            ),
+            originalBrandName: params.getParam(
+              'originalBrandName',
+              ParamType.String,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: HomePageWidget.routeName,
+          path: HomePageWidget.routePath,
+          builder: (context, params) => HomePageWidget(),
+        ),
+        FFRoute(
+          name: SellerLoginWidget.routeName,
+          path: SellerLoginWidget.routePath,
+          builder: (context, params) => SellerLoginWidget(),
+        ),
+        FFRoute(
+          name: ShopRegistrationWidget.routeName,
+          path: ShopRegistrationWidget.routePath,
+          builder: (context, params) => ShopRegistrationWidget(),
+        ),
+        FFRoute(
+          name: SellerGatePageWidget.routeName,
+          path: SellerGatePageWidget.routePath,
+          builder: (context, params) => SellerGatePageWidget(),
+        ),
+        FFRoute(
+          name: SellerAuthRegisterWidget.routeName,
+          path: SellerAuthRegisterWidget.routePath,
+          builder: (context, params) => SellerAuthRegisterWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -348,7 +344,7 @@ class FFRoute {
 
           if (requireAuth && !appStateNotifier.loggedIn) {
             appStateNotifier.setRedirectLocationIfUnset(state.uri.toString());
-            return '/sellerDashboard';
+            return '/sellerAuthRegister';
           }
           return null;
         },
