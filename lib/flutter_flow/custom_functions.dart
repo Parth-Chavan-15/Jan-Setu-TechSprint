@@ -134,3 +134,12 @@ Color getStatusColor(DateTime? lastUpdatexyz) {
   // 4. Old (≥ 24 hours) → Yellow
   return Color(0xFFFFC107); // Amber / Yellow
 }
+
+LatLng createGeoPoint(
+  String latText,
+  String lngText,
+) {
+  double lat = double.tryParse(latText) ?? 0.0;
+  double lng = double.tryParse(lngText) ?? 0.0;
+  return LatLng(lat, lng);
+}

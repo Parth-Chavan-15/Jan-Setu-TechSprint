@@ -7,6 +7,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/upload_data.dart';
 import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
+import '/index.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -942,44 +943,84 @@ class _PatientSearchWidgetState extends State<PatientSearchWidget> {
                                         final containerMedicinesRecord =
                                             snapshot.data!;
 
-                                        return Container(
-                                          width: 100.0,
-                                          height: 80.0,
-                                          decoration: BoxDecoration(
-                                            color: FlutterFlowTheme.of(context)
-                                                .alternate,
-                                            borderRadius:
-                                                BorderRadius.circular(12.0),
-                                          ),
-                                          child: Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    12.0, 12.0, 12.0, 12.0),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-                                                Expanded(
-                                                  child: Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(7.0, 0.0,
-                                                                7.0, 0.0),
-                                                    child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.max,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          containerMedicinesRecord
-                                                              .genericName,
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .titleSmall
-                                                              .override(
-                                                                font: GoogleFonts
-                                                                    .interTight(
+                                        return InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            context.pushNamed(
+                                              PatientStoreResultsWidget
+                                                  .routeName,
+                                              queryParameters: {
+                                                'clickedMedicineDoc':
+                                                    serializeParam(
+                                                  containerMedicinesRecord,
+                                                  ParamType.Document,
+                                                ),
+                                              }.withoutNulls,
+                                              extra: <String, dynamic>{
+                                                'clickedMedicineDoc':
+                                                    containerMedicinesRecord,
+                                              },
+                                            );
+                                          },
+                                          child: Container(
+                                            width: 100.0,
+                                            height: 80.0,
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .alternate,
+                                              borderRadius:
+                                                  BorderRadius.circular(12.0),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      12.0, 12.0, 12.0, 12.0),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  Expanded(
+                                                    child: Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  7.0,
+                                                                  0.0,
+                                                                  7.0,
+                                                                  0.0),
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            containerMedicinesRecord
+                                                                .genericName,
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .titleSmall
+                                                                .override(
+                                                                  font: GoogleFonts
+                                                                      .interTight(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .titleSmall
+                                                                        .fontStyle,
+                                                                  ),
+                                                                  color: Color(
+                                                                      0xFF141B14),
+                                                                  fontSize:
+                                                                      15.0,
+                                                                  letterSpacing:
+                                                                      0.0,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold,
@@ -988,37 +1029,36 @@ class _PatientSearchWidgetState extends State<PatientSearchWidget> {
                                                                       .titleSmall
                                                                       .fontStyle,
                                                                 ),
-                                                                color: Color(
-                                                                    0xFF141B14),
-                                                                fontSize: 15.0,
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .titleSmall
-                                                                    .fontStyle,
-                                                              ),
-                                                        ),
-                                                        Padding(
-                                                          padding:
-                                                              EdgeInsetsDirectional
-                                                                  .fromSTEB(
-                                                                      0.0,
-                                                                      5.0,
-                                                                      0.0,
-                                                                      0.0),
-                                                          child: Text(
-                                                            'Sub for ${containerMedicinesRecord.brandName}',
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .bodyMedium
-                                                                .override(
-                                                                  font:
-                                                                      GoogleFonts
-                                                                          .inter(
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                EdgeInsetsDirectional
+                                                                    .fromSTEB(
+                                                                        0.0,
+                                                                        5.0,
+                                                                        0.0,
+                                                                        0.0),
+                                                            child: Text(
+                                                              'Sub for ${containerMedicinesRecord.brandName}',
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyMedium
+                                                                  .override(
+                                                                    font: GoogleFonts
+                                                                        .inter(
+                                                                      fontWeight: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodyMedium
+                                                                          .fontWeight,
+                                                                      fontStyle: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodyMedium
+                                                                          .fontStyle,
+                                                                    ),
+                                                                    fontSize:
+                                                                        13.0,
+                                                                    letterSpacing:
+                                                                        0.0,
                                                                     fontWeight: FlutterFlowTheme.of(
                                                                             context)
                                                                         .bodyMedium
@@ -1028,36 +1068,46 @@ class _PatientSearchWidgetState extends State<PatientSearchWidget> {
                                                                         .bodyMedium
                                                                         .fontStyle,
                                                                   ),
-                                                                  fontSize:
-                                                                      13.0,
-                                                                  letterSpacing:
-                                                                      0.0,
-                                                                  fontWeight: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontWeight,
-                                                                  fontStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontStyle,
-                                                                ),
+                                                            ),
                                                           ),
-                                                        ),
-                                                      ],
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          0.0, 0.0, 7.0, 0.0),
-                                                  child: FlutterFlowIconButton(
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(0.0, 0.0,
+                                                                7.0, 0.0),
+                                                    child:
+                                                        FlutterFlowIconButton(
+                                                      borderRadius: 8.0,
+                                                      buttonSize: 40.0,
+                                                      fillColor:
+                                                          Color(0xFFFF0000),
+                                                      icon: Icon(
+                                                        Icons.delete,
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .info,
+                                                        size: 24.0,
+                                                      ),
+                                                      onPressed: () async {
+                                                        _model
+                                                            .removeFromMyMedicineList(
+                                                                savedItemItem);
+                                                        safeSetState(() {});
+                                                      },
+                                                    ),
+                                                  ),
+                                                  FlutterFlowIconButton(
                                                     borderRadius: 8.0,
                                                     buttonSize: 40.0,
                                                     fillColor:
-                                                        Color(0xFFFF0000),
+                                                        Color(0xFF6B63F3),
                                                     icon: Icon(
-                                                      Icons.delete,
+                                                      Icons.chevron_right,
                                                       color:
                                                           FlutterFlowTheme.of(
                                                                   context)
@@ -1065,30 +1115,26 @@ class _PatientSearchWidgetState extends State<PatientSearchWidget> {
                                                       size: 24.0,
                                                     ),
                                                     onPressed: () async {
-                                                      _model
-                                                          .removeFromMyMedicineList(
-                                                              savedItemItem);
-                                                      safeSetState(() {});
+                                                      context.pushNamed(
+                                                        PatientStoreResultsWidget
+                                                            .routeName,
+                                                        queryParameters: {
+                                                          'clickedMedicineDoc':
+                                                              serializeParam(
+                                                            containerMedicinesRecord,
+                                                            ParamType.Document,
+                                                          ),
+                                                        }.withoutNulls,
+                                                        extra: <String,
+                                                            dynamic>{
+                                                          'clickedMedicineDoc':
+                                                              containerMedicinesRecord,
+                                                        },
+                                                      );
                                                     },
                                                   ),
-                                                ),
-                                                FlutterFlowIconButton(
-                                                  borderRadius: 8.0,
-                                                  buttonSize: 40.0,
-                                                  fillColor: Color(0xFF6B63F3),
-                                                  icon: Icon(
-                                                    Icons.chevron_right,
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .info,
-                                                    size: 24.0,
-                                                  ),
-                                                  onPressed: () {
-                                                    print(
-                                                        'IconButton pressed ...');
-                                                  },
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         );

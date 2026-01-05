@@ -35,11 +35,29 @@ class StoresRecord extends FirestoreRecord {
   String get ownerUid => _ownerUid ?? '';
   bool hasOwnerUid() => _ownerUid != null;
 
+  // "created_at" field.
+  DateTime? _createdAt;
+  DateTime? get createdAt => _createdAt;
+  bool hasCreatedAt() => _createdAt != null;
+
+  // "license_number" field.
+  String? _licenseNumber;
+  String get licenseNumber => _licenseNumber ?? '';
+  bool hasLicenseNumber() => _licenseNumber != null;
+
+  // "is_generic_store" field.
+  bool? _isGenericStore;
+  bool get isGenericStore => _isGenericStore ?? false;
+  bool hasIsGenericStore() => _isGenericStore != null;
+
   void _initializeFields() {
     _location = snapshotData['location'] as LatLng?;
     _phoneNumber = snapshotData['phone_number'] as String?;
     _storeName = snapshotData['store_name'] as String?;
     _ownerUid = snapshotData['owner_uid'] as String?;
+    _createdAt = snapshotData['created_at'] as DateTime?;
+    _licenseNumber = snapshotData['license_number'] as String?;
+    _isGenericStore = snapshotData['is_generic_store'] as bool?;
   }
 
   static CollectionReference get collection =>
@@ -80,6 +98,9 @@ Map<String, dynamic> createStoresRecordData({
   String? phoneNumber,
   String? storeName,
   String? ownerUid,
+  DateTime? createdAt,
+  String? licenseNumber,
+  bool? isGenericStore,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -87,6 +108,9 @@ Map<String, dynamic> createStoresRecordData({
       'phone_number': phoneNumber,
       'store_name': storeName,
       'owner_uid': ownerUid,
+      'created_at': createdAt,
+      'license_number': licenseNumber,
+      'is_generic_store': isGenericStore,
     }.withoutNulls,
   );
 
@@ -101,12 +125,22 @@ class StoresRecordDocumentEquality implements Equality<StoresRecord> {
     return e1?.location == e2?.location &&
         e1?.phoneNumber == e2?.phoneNumber &&
         e1?.storeName == e2?.storeName &&
-        e1?.ownerUid == e2?.ownerUid;
+        e1?.ownerUid == e2?.ownerUid &&
+        e1?.createdAt == e2?.createdAt &&
+        e1?.licenseNumber == e2?.licenseNumber &&
+        e1?.isGenericStore == e2?.isGenericStore;
   }
 
   @override
-  int hash(StoresRecord? e) => const ListEquality()
-      .hash([e?.location, e?.phoneNumber, e?.storeName, e?.ownerUid]);
+  int hash(StoresRecord? e) => const ListEquality().hash([
+        e?.location,
+        e?.phoneNumber,
+        e?.storeName,
+        e?.ownerUid,
+        e?.createdAt,
+        e?.licenseNumber,
+        e?.isGenericStore
+      ]);
 
   @override
   bool isValidKey(Object? o) => o is StoresRecord;
