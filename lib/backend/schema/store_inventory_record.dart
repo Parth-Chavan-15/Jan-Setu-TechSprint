@@ -25,21 +25,39 @@ class StoreInventoryRecord extends FirestoreRecord {
   DocumentReference? get medicineId => _medicineId;
   bool hasMedicineId() => _medicineId != null;
 
-  // "store_id" field.
-  String? _storeId;
-  String get storeId => _storeId ?? '';
-  bool hasStoreId() => _storeId != null;
-
   // "status" field.
   String? _status;
   String get status => _status ?? '';
   bool hasStatus() => _status != null;
 
+  // "unit_price" field.
+  double? _unitPrice;
+  double get unitPrice => _unitPrice ?? 0.0;
+  bool hasUnitPrice() => _unitPrice != null;
+
+  // "last_updated" field.
+  DateTime? _lastUpdated;
+  DateTime? get lastUpdated => _lastUpdated;
+  bool hasLastUpdated() => _lastUpdated != null;
+
+  // "store_ref" field.
+  DocumentReference? _storeRef;
+  DocumentReference? get storeRef => _storeRef;
+  bool hasStoreRef() => _storeRef != null;
+
+  // "is_generic" field.
+  bool? _isGeneric;
+  bool get isGeneric => _isGeneric ?? false;
+  bool hasIsGeneric() => _isGeneric != null;
+
   void _initializeFields() {
     _qtyInStock = castToType<int>(snapshotData['qty_in_stock']);
     _medicineId = snapshotData['medicine_id'] as DocumentReference?;
-    _storeId = snapshotData['store_id'] as String?;
     _status = snapshotData['status'] as String?;
+    _unitPrice = castToType<double>(snapshotData['unit_price']);
+    _lastUpdated = snapshotData['last_updated'] as DateTime?;
+    _storeRef = snapshotData['store_ref'] as DocumentReference?;
+    _isGeneric = snapshotData['is_generic'] as bool?;
   }
 
   static CollectionReference get collection =>
@@ -79,15 +97,21 @@ class StoreInventoryRecord extends FirestoreRecord {
 Map<String, dynamic> createStoreInventoryRecordData({
   int? qtyInStock,
   DocumentReference? medicineId,
-  String? storeId,
   String? status,
+  double? unitPrice,
+  DateTime? lastUpdated,
+  DocumentReference? storeRef,
+  bool? isGeneric,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
       'qty_in_stock': qtyInStock,
       'medicine_id': medicineId,
-      'store_id': storeId,
       'status': status,
+      'unit_price': unitPrice,
+      'last_updated': lastUpdated,
+      'store_ref': storeRef,
+      'is_generic': isGeneric,
     }.withoutNulls,
   );
 
@@ -102,13 +126,23 @@ class StoreInventoryRecordDocumentEquality
   bool equals(StoreInventoryRecord? e1, StoreInventoryRecord? e2) {
     return e1?.qtyInStock == e2?.qtyInStock &&
         e1?.medicineId == e2?.medicineId &&
-        e1?.storeId == e2?.storeId &&
-        e1?.status == e2?.status;
+        e1?.status == e2?.status &&
+        e1?.unitPrice == e2?.unitPrice &&
+        e1?.lastUpdated == e2?.lastUpdated &&
+        e1?.storeRef == e2?.storeRef &&
+        e1?.isGeneric == e2?.isGeneric;
   }
 
   @override
-  int hash(StoreInventoryRecord? e) => const ListEquality()
-      .hash([e?.qtyInStock, e?.medicineId, e?.storeId, e?.status]);
+  int hash(StoreInventoryRecord? e) => const ListEquality().hash([
+        e?.qtyInStock,
+        e?.medicineId,
+        e?.status,
+        e?.unitPrice,
+        e?.lastUpdated,
+        e?.storeRef,
+        e?.isGeneric
+      ]);
 
   @override
   bool isValidKey(Object? o) => o is StoreInventoryRecord;

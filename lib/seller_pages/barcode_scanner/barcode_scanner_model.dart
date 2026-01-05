@@ -10,6 +10,8 @@ class BarcodeScannerModel extends FlutterFlowModel<BarcodeScannerWidget> {
   // Stores action output result for [Firestore Query - Query a collection] action in Button widget.
   MedicinesRecord? foundMedicine;
   // Stores action output result for [Firestore Query - Query a collection] action in Button widget.
+  StoresRecord? sellerStore;
+  // Stores action output result for [Firestore Query - Query a collection] action in Button widget.
   StoreInventoryRecord? existingStock;
 
   @override

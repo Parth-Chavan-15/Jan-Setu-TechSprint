@@ -30,10 +30,35 @@ class MedicinesRecord extends FirestoreRecord {
   double get stdPrice => _stdPrice ?? 0.0;
   bool hasStdPrice() => _stdPrice != null;
 
+  // "brand_name" field.
+  String? _brandName;
+  String get brandName => _brandName ?? '';
+  bool hasBrandName() => _brandName != null;
+
+  // "search_keywords" field.
+  String? _searchKeywords;
+  String get searchKeywords => _searchKeywords ?? '';
+  bool hasSearchKeywords() => _searchKeywords != null;
+
+  // "generic_source_ref" field.
+  DocumentReference? _genericSourceRef;
+  DocumentReference? get genericSourceRef => _genericSourceRef;
+  bool hasGenericSourceRef() => _genericSourceRef != null;
+
+  // "is_generic" field.
+  bool? _isGeneric;
+  bool get isGeneric => _isGeneric ?? false;
+  bool hasIsGeneric() => _isGeneric != null;
+
   void _initializeFields() {
     _barcode = snapshotData['barcode'] as String?;
     _genericName = snapshotData['generic_name'] as String?;
     _stdPrice = castToType<double>(snapshotData['std_price']);
+    _brandName = snapshotData['brand_name'] as String?;
+    _searchKeywords = snapshotData['search_keywords'] as String?;
+    _genericSourceRef =
+        snapshotData['generic_source_ref'] as DocumentReference?;
+    _isGeneric = snapshotData['is_generic'] as bool?;
   }
 
   static CollectionReference get collection =>
@@ -74,12 +99,20 @@ Map<String, dynamic> createMedicinesRecordData({
   String? barcode,
   String? genericName,
   double? stdPrice,
+  String? brandName,
+  String? searchKeywords,
+  DocumentReference? genericSourceRef,
+  bool? isGeneric,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
       'barcode': barcode,
       'generic_name': genericName,
       'std_price': stdPrice,
+      'brand_name': brandName,
+      'search_keywords': searchKeywords,
+      'generic_source_ref': genericSourceRef,
+      'is_generic': isGeneric,
     }.withoutNulls,
   );
 
@@ -93,12 +126,23 @@ class MedicinesRecordDocumentEquality implements Equality<MedicinesRecord> {
   bool equals(MedicinesRecord? e1, MedicinesRecord? e2) {
     return e1?.barcode == e2?.barcode &&
         e1?.genericName == e2?.genericName &&
-        e1?.stdPrice == e2?.stdPrice;
+        e1?.stdPrice == e2?.stdPrice &&
+        e1?.brandName == e2?.brandName &&
+        e1?.searchKeywords == e2?.searchKeywords &&
+        e1?.genericSourceRef == e2?.genericSourceRef &&
+        e1?.isGeneric == e2?.isGeneric;
   }
 
   @override
-  int hash(MedicinesRecord? e) =>
-      const ListEquality().hash([e?.barcode, e?.genericName, e?.stdPrice]);
+  int hash(MedicinesRecord? e) => const ListEquality().hash([
+        e?.barcode,
+        e?.genericName,
+        e?.stdPrice,
+        e?.brandName,
+        e?.searchKeywords,
+        e?.genericSourceRef,
+        e?.isGeneric
+      ]);
 
   @override
   bool isValidKey(Object? o) => o is MedicinesRecord;

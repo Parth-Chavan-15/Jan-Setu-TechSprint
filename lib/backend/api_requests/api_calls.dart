@@ -8,7 +8,7 @@ export 'api_manager.dart' show ApiCallResponse;
 
 const _kPrivateApiFunctionName = 'ffPrivateApiCall';
 
-class AnalyzeInvoiceCall {
+class AnalyzeInvoiceImageCall {
   static Future<ApiCallResponse> call({
     String? base64Image = '',
   }) async {
@@ -18,11 +18,11 @@ class AnalyzeInvoiceCall {
     {
       "parts": [
         {
-          "text": "Analyze this image. Extract medicine names and quantities. Return ONLY a raw JSON list. keys: 'name' (string), 'qty' (integer). Example: [{\\"name\\": \\"Paracetamol\\", \\"qty\\": 50}]. NO markdown."
+          "text": "Analyze this image. Extract medicine names and quantities. Return output strictly as a raw JSON List. Do not wrap it in an object. Keys: 'name' (string), 'qty' (integer). Example: [{\\"name\\": \\"Paracetamol\\", \\"qty\\": 50}]. Do not use Markdown formatting."
         },
         {
           "inline_data": {
-            "mime_type": "*/*",
+            "mime_type": "image/jpeg",
             "data": "${escapeStringForJson(base64Image)}"
           }
         }
@@ -31,7 +31,7 @@ class AnalyzeInvoiceCall {
   ]
 }''';
     return ApiManager.instance.makeApiCall(
-      callName: 'AnalyzeInvoice',
+      callName: 'AnalyzeInvoiceImage',
       apiUrl:
           'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDAT2Ches-vkZRHU9W7Q7R-H3XIgsZhY04',
       callType: ApiCallType.POST,
@@ -51,9 +51,9 @@ class AnalyzeInvoiceCall {
   }
 }
 
-class FindGenericCall {
+class AnalyzeInvoicePDFCall {
   static Future<ApiCallResponse> call({
-    String? userQuery = '',
+    String? base64Image = '',
   }) async {
     final ffApiRequestBody = '''
 {
@@ -61,16 +61,65 @@ class FindGenericCall {
     {
       "parts": [
         {
-          "text": "Role: You are an expert Pharmacist and Chemist. Task: I have a medicine brand name: \\"${escapeStringForJson(userQuery)}\\". Identify its primary generic chemical salt name. Constraints: 1. Return ONLY the generic name as a single string. 2. Do not write any sentences, explanations, or extra words. 3. If the input is already a generic name, return it as is. 4. If you cannot identify it with 100% certainty, return exactly \\"null\\". 5. Do not hallucinate or guess."
+          "text": "Analyze this PDF document. Extract medicine names and quantities. Return output strictly as a raw JSON List. Do not wrap it in an object. Keys: 'name' (string), 'qty' (integer). Example: [{\\"name\\": \\"Paracetamol\\", \\"qty\\": 50}]. Do not use Markdown formatting."
+        },
+        {
+          "inline_data": {
+            "mime_type": "application/pdf",
+            "data": "${escapeStringForJson(base64Image)}"
+          }
         }
       ]
     }
   ]
 }''';
     return ApiManager.instance.makeApiCall(
-      callName: 'FindGeneric',
+      callName: 'AnalyzeInvoicePDF',
       apiUrl:
-          'https://generativelanguage.googleapis.com/v1/models/gemini-1.0-pro:generateContent?key=AIzaSyDlMBh9sAAnIqmcRVboc4GsDbybdDXyA1M',
+          'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDAT2Ches-vkZRHU9W7Q7R-H3XIgsZhY04',
+      callType: ApiCallType.POST,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      params: {},
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+}
+
+class AnalyzePrescriptionCall {
+  static Future<ApiCallResponse> call({
+    String? base64Image = '',
+  }) async {
+    final ffApiRequestBody = '''
+{
+  "contents": [
+    {
+      "parts": [
+        {
+          "text": "Analyze this prescription image. Extract a list of all medicine names mentioned (brand names or generic names). Ignore dosage (500mg), frequency (1-0-1), and doctor's notes. Return ONLY a raw JSON object with a single key 'medicines' containing a list of strings. Example: {\\"medicines\\": [\\"Dolo 650\\", \\"Pan-D\\", \\"Metformin\\"]}. Do not use Markdown."
+        },
+        {
+          "inline_data": {
+            "mime_type": "image/jpeg",
+            "data": "\${base64Image}"
+          }
+        }
+      ]
+    }
+  ]
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'AnalyzePrescription',
+      apiUrl:
+          'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDAT2Ches-vkZRHU9W7Q7R-H3XIgsZhY04',
       callType: ApiCallType.POST,
       headers: {
         'Content-Type': 'application/json',

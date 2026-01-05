@@ -157,7 +157,7 @@ class _SellerScanWidgetState extends State<SellerScanWidget> {
                     _model.base64String = await actions.convertImageToBase64(
                       _model.uploadedLocalFile_uploadedFile,
                     );
-                    _model.apiResult = await AnalyzeInvoiceCall.call();
+                    _model.apiResult = await AnalyzeInvoiceImageCall.call();
 
                     _model.scannedResults = functions
                         .parseInvoiceItems((_model.apiResult?.jsonBody ?? ''))
@@ -310,7 +310,7 @@ class _SellerScanWidgetState extends State<SellerScanWidget> {
                     _model.pdfBase64 = await actions.convertImageToBase64(
                       _model.uploadedLocalFile_uploadedPDF,
                     );
-                    _model.apiResultPDF = await AnalyzeInvoiceCall.call();
+                    _model.apiResultPDF = await AnalyzeInvoicePDFCall.call();
 
                     _model.scannedResults = functions
                         .parseInvoiceItems(

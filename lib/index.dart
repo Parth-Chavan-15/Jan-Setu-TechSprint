@@ -14,3 +14,8 @@ export '/patients_pages/reminder_page/reminder_page_widget.dart'
     show ReminderPageWidget;
 export '/patients_pages/safety_modal/safety_modal_widget.dart'
     show SafetyModalWidget;
+export '/p1/patient_search/patient_search_widget.dart' show PatientSearchWidget;
+export '/p1/patient_store_results/patient_store_results_widget.dart'
+    show PatientStoreResultsWidget;
+export '/patients_pages/authenticationpage/authenticationpage_widget.dart'
+    show AuthenticationpageWidget;

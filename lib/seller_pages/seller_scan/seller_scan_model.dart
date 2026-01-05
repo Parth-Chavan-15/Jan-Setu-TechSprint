@@ -27,7 +27,7 @@ class SellerScanModel extends FlutterFlowModel<SellerScanWidget> {
 
   // Stores action output result for [Custom Action - convertImageToBase64] action in Container widget.
   String? base64String;
-  // Stores action output result for [Backend Call - API (AnalyzeInvoice)] action in Container widget.
+  // Stores action output result for [Backend Call - API (AnalyzeInvoiceImage)] action in Container widget.
   ApiCallResponse? apiResult;
   bool isDataUploading_uploadedPDF = false;
   FFUploadedFile uploadedLocalFile_uploadedPDF =
@@ -35,7 +35,7 @@ class SellerScanModel extends FlutterFlowModel<SellerScanWidget> {
 
   // Stores action output result for [Custom Action - convertImageToBase64] action in Container widget.
   String? pdfBase64;
-  // Stores action output result for [Backend Call - API (AnalyzeInvoice)] action in Container widget.
+  // Stores action output result for [Backend Call - API (AnalyzeInvoicePDF)] action in Container widget.
   ApiCallResponse? apiResultPDF;
 
   @override

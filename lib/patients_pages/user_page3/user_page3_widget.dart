@@ -609,6 +609,7 @@ class _UserPage3WidgetState extends State<UserPage3Widget> {
                                                                     .bodyMedium
                                                                     .fontStyle,
                                                           ),
+                                                          fontSize: 10.0,
                                                           letterSpacing: 0.0,
                                                           fontWeight:
                                                               FlutterFlowTheme.of(
